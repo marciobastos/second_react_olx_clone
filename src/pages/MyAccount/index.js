@@ -43,16 +43,6 @@ const Page = ()=> {
         }
         getingUser();
     },[]);
-   /* useEffect(()=> {
-        const getAdUser = async (name) => {
-            const json = await api.getAdsUser(name, true);
-            setAdsUserInfo(json);
-            //setLoading(false);
-            console.log(json);
-        }
-        getAdUser(userName);
-    },[]); */
-    //recebe o evento;
     const handleSubmit = async (e)=> {
         e.preventDefault(); // previne o envio
         console.log(stateLoc);
