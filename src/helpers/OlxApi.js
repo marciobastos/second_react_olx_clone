@@ -139,7 +139,6 @@ const OlxApi = {
             '/ad/list',
             options
         );
-        console.log(json);
         return json;
     },
     getAd: async(id , other = false)=>{

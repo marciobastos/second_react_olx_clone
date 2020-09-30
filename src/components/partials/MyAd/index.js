@@ -4,31 +4,44 @@ import {Item } from './styled';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 
-export default (props)=>{
+const url = 'http://alunos.b7web.com.br:501/media/';
+export default ({data, onClick})=>{
     let price = '';
-    let images = JSON.stringify(props.data.images);
-    alert(images);
-    if(props.data.priceNegotiabel){
+    //console.log(JSON.stringify(props.data.images));
+    //let images = JSON.stringify(props.data.images);
+    let teste = [{name: 'Marcio', age: 29}];
+    const handleOpenModal = ()=> {
+        onClick(data);
+        //console.log(data);
+    }
+    if(data.priceNegotiabel){
         price = "Preço Negociável";
     }    
     else {
-        price = `R$ ${props.data.price}`;
+        price = `R$ ${data.price}`;
     }
     return (
-        <Item className="adItem">
-            <Link to={`/ad/${props.data.id}`}>
+        <Item className="adItem" onClick={handleOpenModal}>
+            
+            <Link to={`#`}>
                 <div className="itemImage">
                     <Slide>
-                        {[...images].map((img, k)=>
+                        {data.images.map((img, k)=>
                         <div key={k} className="each-slide">
-                            <img src={img} alt="Not found"/>
+                            <img src={`${url}${img.url}`} alt="Not found"/>
                         </div>                   
                         )}
                     </Slide>
+                    
                 </div>
-                <div className="itemName">{props.data.title}</div>
+                <div className="itemName">{data.title}</div>
                 <div className="itemPrice">{price}</div>
+                <div className="hover-title">
+                    <h2>Clique para editar</h2>
+                </div>        
             </Link>
+             
         </Item>
     );
+
 }

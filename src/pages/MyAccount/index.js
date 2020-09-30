@@ -4,6 +4,8 @@ import useApi from '../../helpers/OlxApi';
 import { doLogin } from '../../helpers/AuthHandler';
 import { PageContainer, PageTitle, ErrorMessage } from '../../components/MainComponents';
 import MyAd from '../../components/partials/MyAd';
+import Modal from '../../components/partials/Modal';
+import ModalProduct from '../../components/partials/ModalProduct';
 
 
 const Page = ()=> {
@@ -11,20 +13,20 @@ const Page = ()=> {
 
     const [name, setName] = useState('');
     const [stateLoc, setStateLoc] = useState('');
-    console.log(stateLoc);
+    
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPass, setConfirmPass] = useState('');
     const [stateList, setStateList] = useState([]);
     //pegar usuario
     const [user, setUser] = useState([]);
-    const [userAds, setUserAds] = useState([]);
     //const [idUser, setId]
-    const [adsUserInfo, setAdsUserInfo] = ([]);
+    const [modalStatus, setModalStatus] = useState(false);
+    const [modalData, setModalData] = useState({});
 
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState('');
-
+    //console.log(stateLoc);
     useEffect(()=>{
         const getStates = async ()=> {
             const slist = await api.getStates();
@@ -37,16 +39,14 @@ const Page = ()=> {
             const userj = await api.getUser();
             setUser(userj);
             setName(userj.name);
-            //setStateLoc(userj.state);
-            console.log(userj.state);
-            console.log(userj);
+            setEmail(userj.email);
+            setStateLoc(userj.state);
+            //console.log(userj.ads);
         }
         getingUser();
     },[]);
     const handleSubmit = async (e)=> {
         e.preventDefault(); // previne o envio
-        console.log(stateLoc);
-        console.log(stateList);
         setDisabled(false);
         setError('');
 
@@ -66,6 +66,16 @@ const Page = ()=> {
         }
         setDisabled(false);
     }
+    const handleOpenModal = ()=>{
+        setModalStatus(true);
+    }
+    const handleProductData = (data)=> {
+        setModalData(data);
+        console.log(data);
+
+        handleOpenModal(true);
+
+}
     return (
         <PageContainer>
             <PageTitle>Minha Conta</PageTitle>
@@ -89,7 +99,7 @@ const Page = ()=> {
                     <label className="area">
                         <div className="area--title">Estado</div>
                         <div className="area--input">
-                            <select name={stateLoc} value={stateLoc} onChange={e=>setStateLoc(e.target.value)}>
+                            <select name="state" value={stateLoc} onChange={e=>setStateLoc(e.target.value)}>
                                 <option></option>
                                 {stateList.map((item, index)=>
                                     <option key={index} value={item._id}>{item.name}</option>
@@ -103,7 +113,7 @@ const Page = ()=> {
                             <input 
                                 type="email" 
                                 disabled={disabled}
-                                value={user.email}
+                                value={email}
                                 onChange={e=>setEmail(e.target.value)}
                                 required
                                 />
@@ -147,12 +157,17 @@ const Page = ()=> {
                     <h2>Meus Anúncios</h2>
                     <div className="list">
                                 {user.ads.map((i,k)=>
-                                   <MyAd key={k} data={i}/>
+                                   <MyAd key={k} data={i} onClick={handleProductData}/>
                                 )}
                             </div>
                     </>
                 }
             </AdsUser>
+            <Modal status={modalStatus} setStatus={setModalStatus}>
+                
+                <ModalProduct data={modalData} setStatus={setModalStatus}/>
+            
+            </Modal>
         </PageContainer>
     )
 }

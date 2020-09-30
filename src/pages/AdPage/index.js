@@ -5,26 +5,32 @@ import { PageArea, Fake, OthersArea, BreadCrumb } from './styled';
 import useApi from '../../helpers/OlxApi';
 import { PageContainer } from '../../components/MainComponents';
 import AdItem from '../../components/partials/AdItem';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 
 
 
 const Page = ()=> {
     const api = useApi();
     const { id } = useParams();
+    const history = useHistory();
 
     const [loading, setLoading ] = useState(true);
     const [adInfo, setAdInfo] = useState({});
+    const [newId, setNewId] = useState('');
     
     useEffect(()=> {
         const getAdInfo = async (id) => {
             const json = await api.getAd(id, true);
             setAdInfo(json);
             setLoading(false);
-            console.log(json);
+            setNewId(id);
+            console.log(newId);
         }
         getAdInfo(id);
     },[]);
+    //atualizar a pagina
+    
+
     const formatDate = (date)=>{
         let cDate = new Date(date);
 

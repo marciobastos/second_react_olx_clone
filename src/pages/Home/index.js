@@ -15,6 +15,7 @@ const Page = ()=> {
     const [categories, setCategories] = useState([]);
     const [adList, setAdList] = useState([]);
 
+    console.log(stateList);
     useEffect(()=>{
         const getStates = async ()=>{
             const slist = await api.getStates();
